@@ -24,6 +24,7 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
@@ -75,6 +76,10 @@ public class SecurityConf {
                     .requestMatchers(GET, "/posts")
                     .permitAll()
                     .requestMatchers(PUT, "/posts/*")
+                    .authenticated()
+                    .requestMatchers(GET, "/posts/*")
+                    .authenticated()
+                    .requestMatchers(DELETE, "/posts/*")
                     .authenticated()
                     .anyRequest()
                     .denyAll())

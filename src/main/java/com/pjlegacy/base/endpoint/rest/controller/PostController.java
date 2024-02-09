@@ -6,6 +6,7 @@ import com.pjlegacy.base.model.validator.PostValidator;
 import com.pjlegacy.base.service.PostService;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,6 +36,16 @@ public class PostController {
     var domain = mapper.toDomain(toCrupdate);
     validator.accept(domain);
     return mapper.toRest(service.crupdate(domain));
+  }
+
+  @GetMapping(value = "/posts/{pid}")
+  public Post getPostById(@PathVariable(name = "pid") String pId) {
+    return mapper.toRest(service.getPostById(pId));
+  }
+
+  @DeleteMapping(value = "/posts/{pid}")
+  public Post getDeletePost(@PathVariable(name = "pid") String pId) {
+    return mapper.toRest(service.getDeletePost(pId));
   }
 
 }

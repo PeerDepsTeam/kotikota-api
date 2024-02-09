@@ -1,6 +1,7 @@
 package com.pjlegacy.base.service;
 
 import com.pjlegacy.base.model.Post;
+import com.pjlegacy.base.model.exception.NotFoundException;
 import com.pjlegacy.base.repository.PostRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,5 +27,17 @@ public class PostService {
 
   public Post crupdate(Post post){
     return repository.save(post);
+  }
+
+  public Post getPostById(String postId){
+    return repository.findById(postId)
+        .orElseThrow(()->new NotFoundException("Post."+postId+" is not found"));
+  }
+
+  public Post getDeletePost(String pId) {
+    repository.deleteById(pId);
+    return Post.builder()
+        .id(pId)
+        .build();
   }
 }
