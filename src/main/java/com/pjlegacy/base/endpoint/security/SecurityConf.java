@@ -24,9 +24,11 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -58,6 +60,7 @@ public class SecurityConf {
                         new AntPathRequestMatcher("/ping"),
                         new AntPathRequestMatcher("/signin"),
                         new AntPathRequestMatcher("/signup"),
+                        new AntPathRequestMatcher("/posts", GET.name()),
                         new AntPathRequestMatcher("/**", OPTIONS.toString())
                     ))),
             AnonymousAuthenticationFilter.class)
@@ -70,6 +73,14 @@ public class SecurityConf {
                     .permitAll()
                     .requestMatchers(POST, "/signup")
                     .permitAll()
+                    .requestMatchers(GET, "/posts")
+                    .permitAll()
+                    .requestMatchers(PUT, "/posts/*")
+                    .authenticated()
+                    .requestMatchers(GET, "/posts/*")
+                    .authenticated()
+                    .requestMatchers(DELETE, "/posts/*")
+                    .authenticated()
                     .anyRequest()
                     .denyAll())
         .csrf(AbstractHttpConfigurer::disable)

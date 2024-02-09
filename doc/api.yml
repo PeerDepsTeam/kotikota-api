@@ -2,13 +2,13 @@ openapi: 3.0.3
 
 info:
   title: kotikota
-  version: 'latest'
+  version: "latest"
 
 servers:
-  - url: 'https://localhost:8080'
+  - url: "https://localhost:8080"
 
 paths:
-  '/ping':
+  "/ping":
     get:
       operationId: ping
       tags:
@@ -150,7 +150,6 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
-
   "/posts":
     get:
       tags:
@@ -168,6 +167,12 @@ paths:
           required: true
           schema:
             type: number
+        - name: categories
+          description: coma-separated categories
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: List of posts.
@@ -342,6 +347,68 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  "/categories":
+    get:
+      tags:
+        - Category
+      summary: Get all categories
+      operationId: getCategories
+      responses:
+        "200":
+          description: List of categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+  "/categories/{cid}":
+    put:
+      tags:
+        - Category
+      summary: crupdate category
+      operationId: crupdateCategoryById
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Category to crupdate
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        "201":
+          description: The crupdated category.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
 components:
   responses:
     400:
@@ -349,31 +416,31 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BadRequestException'
+            $ref: "#/components/schemas/BadRequestException"
     403:
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NotAuthorizedException'
+            $ref: "#/components/schemas/NotAuthorizedException"
     404:
       description: Not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResourceNotFoundException'
+            $ref: "#/components/schemas/ResourceNotFoundException"
     429:
       description: Too many requests to the API
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TooManyRequestsException'
-    '500':
+            $ref: "#/components/schemas/TooManyRequestsException"
+    "500":
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/InternalServerException'
+            $ref: "#/components/schemas/InternalServerException"
   schemas:
     Exception:
       type: object
@@ -384,35 +451,34 @@ components:
           type: string
     InternalServerException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: InternalServerException
         message: Unexpected error
     BadRequestException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: BadRequestException
         message: Bad request
     NotAuthorizedException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: NotAuthorizedException
         message: Not authorized
     ResourceNotFoundException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: ResourceNotFoundException
         message: Resource of type <T> identified by <I> not found
     TooManyRequestsException:
       allOf:
-        - $ref: '#/components/schemas/Exception'
+        - $ref: "#/components/schemas/Exception"
       example:
         type: TooManyRequestsException
         message: Too many requests
-
 
     User:
       properties:
@@ -426,7 +492,7 @@ components:
           type: string
         birth_date:
           type: string
-          format: date
+          format: date-time
         email:
           type: string
         photo:
@@ -454,6 +520,13 @@ components:
         - $ref: "#/components/schemas/User"
         - $ref: "#/components/schemas/AuthenticationPayload"
 
+    Category:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+
     Post:
       properties:
         id:
@@ -462,7 +535,7 @@ components:
           type: number
         deadline:
           type: string
-          format: date
+          format: date-time
         thumbnail:
           type: string
         description:
@@ -473,6 +546,10 @@ components:
           type: string
         author:
           $ref: "#/components/schemas/User"
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
         creation_datetime:
           type: string
           format: date-time
@@ -509,6 +586,7 @@ components:
             - ORANGE_MONEY
             - AIRTEL_MONEY
             - VISA
+
     FundsRaised:
       type: object
       properties:
