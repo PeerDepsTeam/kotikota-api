@@ -11,10 +11,10 @@ public class CategoryMapper {
         .label(domain.getLabel());
   }
 
-  public com.pjlegacy.base.model.Category toDomain(Category domain){
+  public com.pjlegacy.base.model.Category toDomain(Category rest){
     return com.pjlegacy.base.model.Category.builder()
-        .id(domain.getId())
-        .label(domain.getLabel())
+        .id(rest.getId())
+        .label(rest.getLabel())
         .build();
   }
 }

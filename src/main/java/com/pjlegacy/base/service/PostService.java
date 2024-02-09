@@ -3,6 +3,7 @@ package com.pjlegacy.base.service;
 import com.pjlegacy.base.model.Post;
 import com.pjlegacy.base.model.exception.NotFoundException;
 import com.pjlegacy.base.repository.PostRepository;
+import com.pjlegacy.base.repository.dao.PostDao;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -16,13 +17,14 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @AllArgsConstructor
 public class PostService {
   private final PostRepository repository;
+  private final PostDao dao;
 
-  public List<Post> getPosts(Integer page, Integer pageSize){
+  public List<Post> getPosts(Integer page, Integer pageSize, String categories){
     int pageValue = page == null ? 0 : page -1;
     int pageSizeValue = pageSize == null ? 0 : pageSize -1;
     Pageable pageable = PageRequest.of(pageValue, pageSizeValue,
         Sort.by(DESC, "creationDatetime"));
-    return repository.findAll(pageable).toList();
+    return dao.findByCriteria(categories, pageable);
   }
 
   public Post crupdate(Post post){
