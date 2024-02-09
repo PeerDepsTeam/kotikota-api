@@ -81,6 +81,8 @@ public class SecurityConf {
                     .authenticated()
                     .requestMatchers(GET, "/posts/*")
                     .authenticated()
+                    .requestMatchers(GET, "/posts/*/fundsraised")
+                    .authenticated()
                     .requestMatchers(DELETE, "/posts/*")
                     .authenticated()
                     .requestMatchers(GET, "/categories")

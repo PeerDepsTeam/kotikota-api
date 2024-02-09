@@ -24,8 +24,9 @@ public class PostController {
   @GetMapping(value = "/posts")
   public List<Post> getPosts(
       @RequestParam(name = "page", required = false) Integer page,
-      @RequestParam(name = "page_size", required = false) Integer pageSize) {
-    return service.getPosts(page, pageSize).stream()
+      @RequestParam(name = "page_size", required = false) Integer pageSize,
+      @RequestParam(name = "categories", required = false) String categories) {
+    return service.getPosts(page, pageSize, categories).stream()
         .map(mapper::toRest)
         .toList();
   }
