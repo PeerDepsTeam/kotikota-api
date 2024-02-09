@@ -1,0 +1,525 @@
+openapi: 3.0.3
+
+info:
+  title: kotikota
+  version: 'latest'
+
+servers:
+  - url: 'https://localhost:8080'
+
+paths:
+  '/ping':
+    get:
+      operationId: ping
+      tags:
+        - Health
+      responses:
+        200:
+          description: pong
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+
+  "/signin":
+    post:
+      tags:
+        - Security
+      summary: Login user.
+      operationId: signIn
+      requestBody:
+        description: Login payload. set 'user_id' to null when authenticating with email and password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthenticationPayload"
+      responses:
+        "201":
+          description: Logged in payload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+  "/signup":
+    post:
+      tags:
+        - Security
+      summary: Sign up user
+      operationId: signUp
+      requestBody:
+        description: Sign up payload.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUp"
+      responses:
+        "201":
+          description: Signed up user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+  "/users/{id}":
+    get:
+      tags:
+        - User
+      summary: Get user by identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: getUserById
+      responses:
+        "200":
+          description: The identified user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - User
+      summary: Crupdate user by identifier.
+      operationId: crupdateUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: User to crupdate.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: The crupdated user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+
+  "/posts":
+    get:
+      tags:
+        - Posting
+      summary: Get all posts.
+      operationId: getPosts
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: page_size
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: List of posts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+  "/posts/{pid}":
+    get:
+      tags:
+        - Posting
+      summary: Get post by identifier.
+      operationId: getPostById
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The identified post.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Posting
+      summary: Crupdate post by identifier.
+      operationId: crupdatePostById
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Post to crupdate
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      responses:
+        "201":
+          description: The crupdated post.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - Posting
+      summary: Delete post by identifier.
+      operationId: deletePostById
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The deleted post.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+  "/posts/{pid}/fundsraised":
+    get:
+      tags:
+        - Posting
+      summary: Get post's fund raised.
+      operationId: getFundRaised
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The identified post.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FundsRaised"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+  "/transactions":
+    put:
+      tags:
+        - Paying
+      summary: Initiate payments
+      operationId: initiatePayment
+      requestBody:
+        description: Post to crupdate
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentRequest"
+      responses:
+        "201":
+          description: The created payment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentRequest"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+components:
+  responses:
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestException'
+    403:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotAuthorizedException'
+    404:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResourceNotFoundException'
+    429:
+      description: Too many requests to the API
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequestsException'
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerException'
+  schemas:
+    Exception:
+      type: object
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+    InternalServerException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: InternalServerException
+        message: Unexpected error
+    BadRequestException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: BadRequestException
+        message: Bad request
+    NotAuthorizedException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: NotAuthorizedException
+        message: Not authorized
+    ResourceNotFoundException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: ResourceNotFoundException
+        message: Resource of type <T> identified by <I> not found
+    TooManyRequestsException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: TooManyRequestsException
+        message: Too many requests
+
+
+    User:
+      properties:
+        id:
+          type: string
+        last_name:
+          type: string
+        first_name:
+          type: string
+        username:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        email:
+          type: string
+        photo:
+          type: string
+        bio:
+          type: string
+        about:
+          type: string
+        sex:
+          type: string
+          enum:
+            - M
+            - F
+            - OTHER
+
+    AuthenticationPayload:
+      properties:
+        email:
+          type: string
+        provider_id:
+          type: string
+
+    SignUp:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - $ref: "#/components/schemas/AuthenticationPayload"
+
+    Post:
+      properties:
+        id:
+          type: string
+        amount_required:
+          type: number
+        deadline:
+          type: string
+          format: date
+        thumbnail:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        title:
+          type: string
+        author:
+          $ref: "#/components/schemas/User"
+        creation_datetime:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    PaymentRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: integer
+        post_id:
+          type: string
+        from:
+          $ref: "#/components/schemas/User"
+        to:
+          $ref: "#/components/schemas/User"
+        label:
+          type: string
+        reference:
+          type: string
+        payment_type:
+          type: string
+          enum:
+            - ACTION
+            - DONATION
+        payment_method:
+          type: string
+          enum:
+            - MVOLA
+            - ORANGE_MONEY
+            - AIRTEL_MONEY
+            - VISA
+    FundsRaised:
+      type: object
+      properties:
+        id:
+          type: string
+        post_id:
+          type: string
+        amount:
+          type: number
+          description: sum of all transactions amount
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentRequest"
