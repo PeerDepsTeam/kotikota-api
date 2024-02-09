@@ -62,6 +62,7 @@ public class SecurityConf {
                         new AntPathRequestMatcher("/signup"),
                         new AntPathRequestMatcher("/posts", GET.name()),
                         new AntPathRequestMatcher("/categories", GET.name()),
+                        new AntPathRequestMatcher("/categories/*", GET.name()),
                         new AntPathRequestMatcher("/**", OPTIONS.toString())
                     ))),
             AnonymousAuthenticationFilter.class)
@@ -83,6 +84,8 @@ public class SecurityConf {
                     .requestMatchers(DELETE, "/posts/*")
                     .authenticated()
                     .requestMatchers(GET, "/categories")
+                    .permitAll()
+                    .requestMatchers(GET, "/categories/*")
                     .permitAll()
                     .anyRequest()
                     .denyAll())

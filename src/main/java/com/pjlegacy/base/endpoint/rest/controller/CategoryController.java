@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,6 +21,11 @@ public class CategoryController {
     return service.getCategories().stream()
         .map(mapper::toRest)
         .collect(Collectors.toList());
+  }
+
+  @GetMapping(value = "/categories/{id}")
+  public Category getCategoryById(@PathVariable("id") String id){
+    return mapper.toRest(service.getCategoryById(id));
   }
 
 }
