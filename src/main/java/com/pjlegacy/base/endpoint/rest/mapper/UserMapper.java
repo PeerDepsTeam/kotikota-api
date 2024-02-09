@@ -15,7 +15,7 @@ public class UserMapper {
         .about(domain.getAbout())
         .firstName(domain.getFirstname())
         .lastName(domain.getLastname())
-        //.birthDate(from(domain.getBirthdate()))
+        .birthDate(domain.getBirthdate())
         .photo(domain.getPhoto())
         .username(domain.getUsername())
         .sex(domain.getSex());
@@ -30,10 +30,26 @@ public class UserMapper {
         .about(domain.getAbout())
         .firstname(domain.getFirstName())
         .lastname(domain.getLastName())
-        //.birthDate(from(domain.getBirthdate()))
+        .birthdate(domain.getBirthDate())
         .photo(domain.getPhoto())
         .username(domain.getUsername())
         .sex(sex !=null ? sexMapper(sex) : null)
+        .build();
+  }
+
+  public com.pjlegacy.base.model.User toDomain(User domain) {
+    var sex = domain.getSex();
+    return com.pjlegacy.base.model.User.builder()
+        .id(domain.getId())
+        .bio(domain.getBio())
+        .email(domain.getEmail())
+        .about(domain.getAbout())
+        .firstname(domain.getFirstName())
+        .lastname(domain.getLastName())
+        .birthdate(domain.getBirthDate())
+        .photo(domain.getPhoto())
+        .username(domain.getUsername())
+        .sex(sex)
         .build();
   }
 
