@@ -27,6 +27,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -73,6 +74,8 @@ public class SecurityConf {
                     .permitAll()
                     .requestMatchers(GET, "/posts")
                     .permitAll()
+                    .requestMatchers(PUT, "/posts/*")
+                    .authenticated()
                     .anyRequest()
                     .denyAll())
         .csrf(AbstractHttpConfigurer::disable)

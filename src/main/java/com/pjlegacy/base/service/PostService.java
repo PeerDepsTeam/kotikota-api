@@ -23,4 +23,8 @@ public class PostService {
         Sort.by(DESC, "creationDatetime"));
     return repository.findAll(pageable).toList();
   }
+
+  public Post crupdate(Post post){
+    return repository.save(post);
+  }
 }
