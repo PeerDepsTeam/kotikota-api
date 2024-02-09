@@ -21,7 +21,7 @@ public class PostService {
 
   public List<Post> getPosts(Integer page, Integer pageSize, String categories){
     int pageValue = page == null ? 0 : page -1;
-    int pageSizeValue = pageSize == null ? 0 : pageSize -1;
+    int pageSizeValue = pageSize == null ? 10 : pageSize -1;
     Pageable pageable = PageRequest.of(pageValue, pageSizeValue,
         Sort.by(DESC, "creationDatetime"));
     return dao.findByCriteria(categories, pageable);

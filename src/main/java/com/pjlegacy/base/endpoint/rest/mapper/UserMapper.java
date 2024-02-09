@@ -17,22 +17,24 @@ public class UserMapper {
         .lastName(domain.getLastname())
         .birthDate(domain.getBirthdate())
         .photo(domain.getPhoto())
+        .firebaseId(domain.getFirebaseId())
         .username(domain.getUsername())
         .sex(domain.getSex());
   }
 
-  public com.pjlegacy.base.model.User toDomain(SignUp domain) {
-    var sex = domain.getSex();
+  public com.pjlegacy.base.model.User toDomain(SignUp rest) {
+    var sex = rest.getSex();
     return com.pjlegacy.base.model.User.builder()
-        .id(domain.getId())
-        .bio(domain.getBio())
-        .email(domain.getEmail())
-        .about(domain.getAbout())
-        .firstname(domain.getFirstName())
-        .lastname(domain.getLastName())
-        .birthdate(domain.getBirthDate())
-        .photo(domain.getPhoto())
-        .username(domain.getUsername())
+        .id(rest.getId())
+        .bio(rest.getBio())
+        .email(rest.getEmail())
+        .about(rest.getAbout())
+        .firstname(rest.getFirstName())
+        .lastname(rest.getLastName())
+        .birthdate(rest.getBirthDate())
+        .firebaseId(rest.getProviderId())
+        .photo(rest.getPhoto())
+        .username(rest.getUsername())
         .sex(sex !=null ? sexMapper(sex) : null)
         .build();
   }
@@ -47,6 +49,7 @@ public class UserMapper {
         .firstname(rest.getFirstName())
         .lastname(rest.getLastName())
         .birthdate(rest.getBirthDate())
+        .firebaseId(rest.getFirebaseId())
         .photo(rest.getPhoto())
         .username(rest.getUsername())
         .sex(sex)

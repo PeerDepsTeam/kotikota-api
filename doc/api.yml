@@ -486,6 +486,8 @@ components:
           type: string
         last_name:
           type: string
+        firebase_id:
+          type: string
         first_name:
           type: string
         username:

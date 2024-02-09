@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
@@ -30,11 +31,13 @@ public class PaymentRequest {
   @Id
   private String id;
   private Integer amount;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   private Post post;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
+  @JoinColumn(name = "sender_id")
   private User from;
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
+  @JoinColumn(name = "receiver_id")
   private User to;
   private String label;
   private String reference;
