@@ -87,6 +87,8 @@ public class SecurityConf {
                     .permitAll()
                     .requestMatchers(GET, "/categories/*")
                     .permitAll()
+                    .requestMatchers(PUT, "/transactions")
+                    .authenticated()
                     .anyRequest()
                     .denyAll())
         .csrf(AbstractHttpConfigurer::disable)
