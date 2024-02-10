@@ -1,7 +1,5 @@
 FROM ubuntu:latest AS base
 
-# Install any necessary dependencies
-
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . /app
@@ -20,8 +18,11 @@ RUN chmod +x ./gradlew
 # Copy the publish script into the Docker image
 COPY publish_gen_to_maven_local.sh /app/
 
-# Run the script
-RUN ./publish_gen_to_maven_local.sh
+# Ensure script is executable
+RUN chmod +x /app/publish_gen_to_maven_local.sh
+
+# Run the script with debugging output
+RUN bash -x /app/publish_gen_to_maven_local.sh
 
 # Continue with your existing steps
 
