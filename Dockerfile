@@ -2,7 +2,12 @@ FROM ubuntu:latest AS base
 
 # Install Java, Gradle, and Maven
 RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk gradle maven
+    apt-get install -y openjdk-17-jdk gradle wget && \
+    wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
+    tar xzvf apache-maven-3.8.4-bin.tar.gz -C /usr/share && \
+    ln -s /usr/share/apache-maven-3.8.4 /usr/share/maven && \
+    rm apache-maven-3.8.4-bin.tar.gz && \
+    export PATH=/usr/share/maven/bin:$PATH
 
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
