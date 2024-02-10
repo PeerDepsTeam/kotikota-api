@@ -612,6 +612,7 @@ components:
           type: string
         creation_datetime:
           type: string
+          format: date-time
         from:
           $ref: "#/components/schemas/User"
         to:

@@ -3,11 +3,13 @@ package com.pjlegacy.base.endpoint.rest.mapper;
 import com.pjlegacy.base.endpoint.rest.model.FundsRaised;
 import com.pjlegacy.base.endpoint.rest.model.PaymentRequest;
 import com.pjlegacy.base.service.PostService;
+import java.time.Instant;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static java.math.BigDecimal.valueOf;
+import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
 
 @Component
@@ -21,6 +23,7 @@ public class PaymentMapper {
         .id(domain.getId())
         .postId(domain.getPost().getId())
         .amount(domain.getAmount())
+        .creationDatetime(domain.getCreationDatetime())
         .from(userMapper.toRest(domain.getFrom()))
         .to(userMapper.toRest(domain.getTo()))
         .paymentMethod(domain.getPaymentMethod())
@@ -35,6 +38,7 @@ public class PaymentMapper {
         .id(rest.getId())
         .post(post)
         .amount(rest.getAmount())
+        .creationDatetime(now())
         .from(userMapper.toDomain(rest.getFrom()))
         .to(userMapper.toDomain(rest.getTo()))
         .paymentMethod(rest.getPaymentMethod())
