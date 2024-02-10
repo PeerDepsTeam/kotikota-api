@@ -450,6 +450,69 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
+  "/messages":
+    get:
+      tags:
+        - Messaging
+      summary: Get messages between users.
+      operationId: getAllMessages
+      parameters:
+        - name: senderId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: receiverId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of messages.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageModel"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      tags:
+        - Messaging
+      summary: Post a message.
+      operationId: postMessage
+      requestBody:
+        description: Message payload.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageRest"
+      responses:
+        "200":
+          description: The posted message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageModel"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
 
 components:
   responses:
@@ -600,6 +663,33 @@ components:
         updated_at:
           type: string
           format: date-time
+    MessageModel:
+      properties:
+        id:
+          type: string
+        sender:
+          $ref: "#/components/schemas/User"
+        message:
+          type: string
+        message_date:
+          type: string
+          format: date
+        receiver:
+          $ref: "#/components/schemas/User"
+
+    MessageRest:
+      properties:
+        id:
+          type: string
+        id_sender:
+          type: string
+        message:
+          type: string
+        message_date:
+          type: string
+          format: date
+        id_receiver:
+          type: string
 
     PaymentRequest:
       type: object
