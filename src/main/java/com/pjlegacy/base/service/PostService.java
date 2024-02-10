@@ -36,6 +36,13 @@ public class PostService {
         .orElseThrow(()->new NotFoundException("Post."+postId+" is not found"));
   }
 
+  public List<Post> findPostsByUserId(String userId, Integer page, Integer pageSize){
+    int pageValue = page == null ? 0 : page -1;
+    int pageSizeValue = pageSize == null ? 10 : pageSize;
+    Pageable pageable = PageRequest.of(pageValue, pageSizeValue, Sort.by(DESC, "creationDatetime"));
+    return repository.findByAuthorId(userId, pageable).toList();
+  }
+
   public Post getDeletePost(String pId) {
     repository.deleteById(pId);
     return Post.builder()

@@ -610,6 +610,8 @@ components:
           type: integer
         post_id:
           type: string
+        creation_datetime:
+          type: string
         from:
           $ref: "#/components/schemas/User"
         to:
