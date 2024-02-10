@@ -1,15 +1,5 @@
-FROM ubuntu:latest AS base
+FROM docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726 AS build
 
-# Install Java, Gradle, and Maven
-RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk gradle wget && \
-    wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
-    tar xzvf apache-maven-3.8.4-bin.tar.gz -C /usr/share && \
-    ln -s /usr/share/apache-maven-3.8.4 /usr/share/maven && \
-    rm apache-maven-3.8.4-bin.tar.gz && \
-    export PATH=/usr/share/maven/bin:$PATH
-
-FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . /app
 ARG DB_URL
@@ -30,15 +20,19 @@ COPY publish_gen_to_maven_local.sh /app/
 # Ensure script is executable
 RUN chmod +x /app/publish_gen_to_maven_local.sh
 
+# Initialize Maven repository inside the build container
+RUN gradle -q initMavenRepo || true
+
 # Run the script with debugging output
-RUN mkdir -p build/gen && bash -x /app/publish_gen_to_maven_local.sh
+RUN apt-get update && \
+        apt-get install -y maven && \
+        mkdir -p build/gen && \
+        bash -x /app/publish_gen_to_maven_local.sh
 
 RUN ./gradlew clean build
 
-# Use the official OpenJDK 17 base image
 FROM openjdk:17 AS final
 
-# Set the working directory inside the container
 WORKDIR /app
 
 # Copy the JAR file from the build stage
@@ -46,5 +40,4 @@ COPY --from=build /app/build/libs/*.jar /app/kotikota.jar
 
 EXPOSE 8080
 
-# Command to run your application
 CMD ["java", "-jar", "/app/kotikota.jar"]
