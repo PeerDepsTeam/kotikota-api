@@ -29,4 +29,4 @@ COPY --from=build /app/build/libs/*.jar /app/kotikota.jar
 EXPOSE 8080
 
 # Command to run your application
-CMD ["java", "-jar", "/app/kotranaapi.jar"]
+CMD ["java", "-jar", "/app/kotikota.jar"]
