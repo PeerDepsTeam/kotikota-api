@@ -17,6 +17,11 @@ public class UserService {
         .orElseThrow(()-> new NotFoundException("User."+email+" is not found"));
   }
 
+  public User getUserById(String userId){
+    return repository.findById(userId)
+        .orElseThrow(()-> new NotFoundException("User."+userId+" is not found"));
+  }
+
   public User save(User toSave){
     return repository.save(toSave);
   }
