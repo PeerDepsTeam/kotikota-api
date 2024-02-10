@@ -1,4 +1,7 @@
-FROM ubuntu:latest
+FROM ubuntu:latest AS base
+
+# Install any necessary dependencies
+
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . /app
@@ -14,11 +17,16 @@ ENV FB_KEY=$FB_KEY
 # Change permissions for gradlew
 RUN chmod +x ./gradlew
 
-# Run the Gradle build
-RUN ./gradlew clean build -x test
+# Copy the publish script into the Docker image
+COPY publish_gen_to_maven_local.sh /app/
+
+# Run the script
+RUN ./publish_gen_to_maven_local.sh
+
+# Continue with your existing steps
 
 # Use the official OpenJDK 17 base image
-FROM openjdk:17
+FROM openjdk:17 AS final
 
 # Set the working directory inside the container
 WORKDIR /app
