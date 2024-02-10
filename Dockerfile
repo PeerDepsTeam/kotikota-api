@@ -18,7 +18,7 @@ RUN chmod +x ./gradlew
 COPY publish_gen_to_maven_local.sh /
 
 # Ensure script is executable
-RUN chmod +x /app/publish_gen_to_maven_local.sh
+RUN chmod +x /publish_gen_to_maven_local.sh
 
 # Initialize Maven repository inside the build container
 RUN gradle -q initMavenRepo || true
@@ -26,7 +26,7 @@ RUN gradle -q initMavenRepo || true
 # Run the script with debugging output
 RUN apt-get update && \
         apt-get install -y maven && \
-        bash -x /app/publish_gen_to_maven_local.sh
+        bash -x /publish_gen_to_maven_local.sh
 
 RUN ./gradlew clean build
 
@@ -35,8 +35,8 @@ FROM openjdk:17 AS final
 WORKDIR /
 
 # Copy the JAR file from the build stage
-COPY --from=build /build/libs/*.jar /app/kotikota.jar
+COPY --from=build /build/libs/*.jar /kotikota.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app/kotikota.jar"]
+CMD ["java", "-jar", "/kotikota.jar"]
