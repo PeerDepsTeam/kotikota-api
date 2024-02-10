@@ -17,14 +17,14 @@ RUN chmod +x ./gradlew
 # Run the Gradle build
 RUN ./gradlew clean build -x test
 
+# Install Maven
+RUN apt-get update && apt-get install -y maven
+
 # Copy the script into the Docker image
 COPY publish_gen_to_maven_local.sh /app/
 
 # Ensure the script is executable
 RUN chmod +x /app/publish_gen_to_maven_local.sh
-
-# Install Maven
-RUN apt-get update && apt-get install -y maven
 
 # Run the script
 RUN /app/publish_gen_to_maven_local.sh
