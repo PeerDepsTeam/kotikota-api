@@ -17,11 +17,8 @@ RUN chmod +x ./gradlew
 # Run the Gradle build
 RUN ./gradlew clean build -x test
 
-# Use the official Maven image to generate and install Maven artifacts
-FROM maven:3.8.4 AS maven_build
-WORKDIR /app
-COPY --from=build /app/build/gen /app/gen
-RUN cd /app/gen && mvn clean install
+# Install Maven
+RUN apt-get update && apt-get install -y maven
 
 # Use the official OpenJDK 17 base image
 FROM openjdk:17 AS final
@@ -29,11 +26,8 @@ FROM openjdk:17 AS final
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the JAR file from the Gradle build stage
+# Copy the JAR file from the build stage
 COPY --from=build /app/build/libs/*.jar /app/kotikota.jar
-
-# Copy the Maven artifacts from the Maven build stage
-COPY --from=maven_build /app/gen/target/*.jar /app/
 
 EXPOSE 8080
 
