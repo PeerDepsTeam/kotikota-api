@@ -62,6 +62,7 @@ public class SecurityConf {
                         new AntPathRequestMatcher("/signin", POST.name()),
                         new AntPathRequestMatcher("/signup", POST.name()),
                         new AntPathRequestMatcher("/posts", GET.name()),
+                        new AntPathRequestMatcher("/posts/*", GET.name()),
                         new AntPathRequestMatcher("/categories", GET.name()),
                         new AntPathRequestMatcher("/categories/*", GET.name()),
                         new AntPathRequestMatcher("/**", OPTIONS.toString())
@@ -87,7 +88,7 @@ public class SecurityConf {
                     .requestMatchers(PUT, "/posts/*")
                     .authenticated()
                     .requestMatchers(GET, "/posts/*")
-                    .authenticated()
+                    .permitAll()
                     .requestMatchers(GET, "/posts/*/fundsraised")
                     .authenticated()
                     .requestMatchers(DELETE, "/posts/*")

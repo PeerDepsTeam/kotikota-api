@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
@@ -50,8 +51,7 @@ public class Post implements Serializable {
   @Timestamp
   private Instant deadline;
 
-  @OneToMany(cascade = ALL, fetch = LAZY)
-  @JoinColumn(name = "post_id", unique = true)
+  @ManyToMany(cascade = ALL, fetch = LAZY)
   private List<Category> categories;
 
 }

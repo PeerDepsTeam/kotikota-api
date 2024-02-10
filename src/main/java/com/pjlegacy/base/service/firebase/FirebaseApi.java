@@ -9,12 +9,14 @@ import com.google.firebase.auth.FirebaseToken;
 import com.pjlegacy.base.model.exception.ApiException;
 import java.io.ByteArrayInputStream;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static com.pjlegacy.base.model.exception.ApiException.ExceptionType.SERVER_EXCEPTION;
 
 @Component
+@Slf4j
 public class FirebaseApi {
   private static final Object lock = new Object();
   private static boolean firebaseAppInitialized = false;
@@ -56,6 +58,7 @@ public class FirebaseApi {
 
     try {
       FirebaseToken token = auth().verifyIdToken(bearer);
+      log.info("User token "+ token.getUid()+ " "+token.getEmail());
       return token == null
           ? null
           : FirebaseUser.builder().id(token.getUid()).email(token.getEmail()).build();
