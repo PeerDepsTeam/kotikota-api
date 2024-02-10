@@ -27,7 +27,7 @@ RUN gradle -q initMavenRepo || true
 RUN apt-get update && \
         apt-get install -y maven && \
         mkdir -p build/gen && \
-        /bin/sh -xc './publish_gen_to_maven_local.sh'
+        /bin/sh -cx "./publish_gen_to_maven_local.sh"
 
 RUN ./gradlew clean build
 
