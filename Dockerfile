@@ -1,7 +1,7 @@
 FROM docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726 AS build
 
-WORKDIR /app
-COPY . /app
+WORKDIR /
+COPY . /
 ARG DB_URL
 ENV DB_URL=$DB_URL
 ARG DB_NAME
@@ -15,7 +15,7 @@ ENV FB_KEY=$FB_KEY
 RUN chmod +x ./gradlew
 
 # Copy the publish script into the Docker image
-COPY publish_gen_to_maven_local.sh /app/
+COPY publish_gen_to_maven_local.sh /
 
 # Ensure script is executable
 RUN chmod +x /app/publish_gen_to_maven_local.sh
@@ -32,10 +32,10 @@ RUN ./gradlew clean build
 
 FROM openjdk:17 AS final
 
-WORKDIR /app
+WORKDIR /
 
 # Copy the JAR file from the build stage
-COPY --from=build /app/build/libs/*.jar /app/kotikota.jar
+COPY --from=build /build/libs/*.jar /app/kotikota.jar
 
 EXPOSE 8080
 
