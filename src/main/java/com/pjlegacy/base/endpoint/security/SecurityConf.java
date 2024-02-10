@@ -93,6 +93,8 @@ public class SecurityConf {
                     .authenticated()
                     .requestMatchers(GET, "/users/*")
                     .authenticated()
+                    .requestMatchers(GET, "/users/*/posts")
+                    .authenticated()
                     .requestMatchers(PUT, "/users/*")
                     .authenticated()
                     .anyRequest()

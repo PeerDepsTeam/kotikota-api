@@ -49,4 +49,13 @@ public class PostController {
     return mapper.toRest(service.getDeletePost(pId));
   }
 
+  @GetMapping(value = "/users/{id}/posts")
+  public List<Post> getPostsByUserId(@PathVariable("id") String userId,
+                                     @RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "page_size", required = false) Integer pageSize){
+    return service.findPostsByUserId(userId, page, pageSize).stream()
+        .map(mapper::toRest)
+        .toList();
+  }
+
 }

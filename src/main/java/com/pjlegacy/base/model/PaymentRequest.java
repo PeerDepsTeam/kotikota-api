@@ -9,12 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -41,6 +43,8 @@ public class PaymentRequest {
   private User to;
   private String label;
   private String reference;
+  @CreationTimestamp
+  private Instant creationDatetime;
   @Enumerated(STRING)
   @JdbcTypeCode(NAMED_ENUM)
   private com.pjlegacy.base.endpoint.rest.model.PaymentRequest.PaymentTypeEnum paymentType;
