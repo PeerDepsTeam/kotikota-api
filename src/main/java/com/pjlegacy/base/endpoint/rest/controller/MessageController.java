@@ -1,8 +1,8 @@
 package com.pjlegacy.base.endpoint.rest.controller;
 
 import com.pjlegacy.base.endpoint.rest.mapper.MessageMapper;
+import com.pjlegacy.base.endpoint.rest.model.MessageRest;
 import com.pjlegacy.base.model.chatModel.MessageModel;
-import com.pjlegacy.base.model.chatModel.MessageRest;
 import com.pjlegacy.base.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
