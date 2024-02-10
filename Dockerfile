@@ -1,7 +1,7 @@
-FROM docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726 AS build
-
-WORKDIR /
-COPY . /
+# Use the official Maven image to build the application
+FROM gradle:8.5-jdk17 AS build
+WORKDIR /app
+COPY . /app
 ARG DB_URL
 ENV DB_URL=$DB_URL
 ARG DB_NAME
@@ -14,30 +14,28 @@ ENV FB_KEY=$FB_KEY
 # Change permissions for gradlew
 RUN chmod +x ./gradlew
 
-# Copy the publish script into the Docker image
-COPY publish_gen_to_maven_local.sh /
+# Run the Gradle build
+RUN ./gradlew clean build -x test
 
-# Ensure script is executable
-RUN chmod +x /publish_gen_to_maven_local.sh
+# Use the official Maven image to generate and install Maven artifacts
+FROM maven:3.8.4 AS maven_build
+WORKDIR /app
+COPY --from=build /app/build/gen /app/gen
+RUN cd /app/gen && mvn clean install
 
-# Initialize Maven repository inside the build container
-RUN gradle -q initMavenRepo || true
-
-# Run the script with debugging output
-RUN apt-get update && \
-        apt-get install -y maven && \
-        mkdir -p build/gen && \
-        /bin/sh -cx "./publish_gen_to_maven_local.sh"
-
-RUN ./gradlew clean build
-
+# Use the official OpenJDK 17 base image
 FROM openjdk:17 AS final
 
-WORKDIR /
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy the JAR file from the build stage
-COPY --from=build /build/libs/*.jar /kotikota.jar
+# Copy the JAR file from the Gradle build stage
+COPY --from=build /app/build/libs/*.jar /app/kotikota.jar
+
+# Copy the Maven artifacts from the Maven build stage
+COPY --from=maven_build /app/gen/target/*.jar /app/
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/kotikota.jar"]
+# Command to run your application
+CMD ["java", "-jar", "/app/kotikota.jar"]
