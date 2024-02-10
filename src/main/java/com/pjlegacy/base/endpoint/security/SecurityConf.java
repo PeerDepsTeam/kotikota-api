@@ -59,8 +59,8 @@ public class SecurityConf {
                     new OrRequestMatcher(
                         new AntPathRequestMatcher("/ping"),
                         new AntPathRequestMatcher("/messages"),
-                        new AntPathRequestMatcher("/signin"),
-                        new AntPathRequestMatcher("/signup"),
+                        new AntPathRequestMatcher("/signin", POST.name()),
+                        new AntPathRequestMatcher("/signup", POST.name()),
                         new AntPathRequestMatcher("/posts", GET.name()),
                         new AntPathRequestMatcher("/categories", GET.name()),
                         new AntPathRequestMatcher("/categories/*", GET.name()),
@@ -70,6 +70,8 @@ public class SecurityConf {
         .authorizeHttpRequests(
             (authorize) ->
                 authorize
+                    .requestMatchers(OPTIONS, "/**")
+                    .permitAll()
                     .requestMatchers("/ping")
                     .permitAll()
                     .requestMatchers(POST, "/signin")
