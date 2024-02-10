@@ -1,5 +1,9 @@
 FROM ubuntu:latest AS base
 
+# Install Java, Gradle, and Maven
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk gradle maven
+
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . /app
