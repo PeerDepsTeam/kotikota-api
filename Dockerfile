@@ -15,6 +15,9 @@ ENV FB_KEY=$FB_KEY
 # Change permissions for gradlew
 RUN chmod +x ./gradlew
 
+# Build the project and generate the required directories
+RUN ./gradlew clean build
+
 # Copy the publish script into the Docker image
 COPY publish_gen_to_maven_local.sh /app/
 
@@ -22,9 +25,7 @@ COPY publish_gen_to_maven_local.sh /app/
 RUN chmod +x /app/publish_gen_to_maven_local.sh
 
 # Run the script with debugging output
-RUN bash -x /app/publish_gen_to_maven_local.sh
-
-# Continue with your existing steps
+RUN mkdir -p build/gen && bash -x /app/publish_gen_to_maven_local.sh
 
 # Use the official OpenJDK 17 base image
 FROM openjdk:17 AS final
